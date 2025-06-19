@@ -1,5 +1,7 @@
 # 🧹 Temp Cleaner Go
 
+<img src="https://github.com/Dedo-Finger2/temp-delete-go/blob/master/cover.png?raw=true">
+
 **Temp Cleaner** is a small utility written in Go to automatically clean up the temporary folders on a Windows system.  
 It clears both:
 
