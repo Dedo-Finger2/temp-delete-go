@@ -22,7 +22,7 @@ func main() {
 	}
 
 	if len(rtEntries) == 0 {
-		fmt.Printf("Found no item inside '%s'. Next...\n", ut[0])
+		fmt.Printf("Found no item inside '%s'. Next...\n\n", ut[0])
 	} else {
 		fmt.Printf(
 			"Found %d items inside '%s' folder. Starting to clean up...\n",
@@ -34,7 +34,7 @@ func main() {
 			WriteLogFile(err)
 		}
 
-		fmt.Printf("'%s' was cleaned! Next is '%s'\n", ut[0], ut[1])
+		fmt.Printf("'%s' was cleaned! Next is '%s'\n\n", ut[0], ut[1])
 	}
 
 	fmt.Printf("Listing items inside '%s' folder...\n", ut[1])
@@ -56,7 +56,7 @@ func main() {
 			WriteLogFile(err)
 		}
 
-		fmt.Printf("'%s' was cleaned!\n", ut[1])
+		fmt.Printf("'%s' was cleaned!\n\n", ut[1])
 	}
 
 	fmt.Println("You can close this terminal, or press any key to finish it.")
