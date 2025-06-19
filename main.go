@@ -5,34 +5,52 @@ import (
 	"log"
 	"os"
 	"os/user"
+	"path"
+	"time"
 )
 
 func main() {
 	ut, err := GetUserTempFolders()
 	if err != nil {
-		log.Fatal(err)
+		WriteLogFile(err)
 	}
+
+	fmt.Printf("Listing items inside '%s' folder...\n", ut[0])
 
 	rtEntries, err := os.ReadDir(ut[0])
 	if err != nil {
-		log.Fatal(err)
+		WriteLogFile(err)
 	}
+	fmt.Printf(
+		"Found %d items inside '%s' folder. Starting to clean up...\n",
+		len(rtEntries),
+		ut[0],
+	)
+
 	if err := DeleteFolderEntries(ut[0], rtEntries); err != nil {
-		log.Fatal(err)
+		WriteLogFile(err)
 	}
 
-	fmt.Println("Regular temp cleaned!")
+	fmt.Printf("'%s' was cleaned! Next is '%s'", ut[0], ut[1])
 
+	fmt.Printf("Listing items inside '%s' folder...\n", ut[1])
 	ptEntries, err := os.ReadDir(ut[1])
 	if err != nil {
-		log.Fatal(err)
+		WriteLogFile(err)
 	}
+	fmt.Printf(
+		"Found %d items inside '%s' folder. Starting to clean up...\n",
+		len(ptEntries),
+		ut[1],
+	)
+
 	if err := DeleteFolderEntries(ut[1], ptEntries); err != nil {
-		log.Fatal(err)
+		WriteLogFile(err)
 	}
 
-	fmt.Println("Percent temp cleaned!")
+	fmt.Printf("'%s' was cleaned!", ut[1])
 
+	fmt.Println("You can close this terminal, or press any key to finish it.")
 	fmt.Scanln()
 }
 
@@ -53,4 +71,23 @@ func GetUserTempFolders() ([]string, error) {
 	}
 	percentTempPath := fmt.Sprintf("%s\\AppData\\Local\\Temp", u.HomeDir)
 	return []string{REGULAR_TEMP_PATH, percentTempPath}, nil
+}
+
+func WriteLogFile(inErr error) error {
+	u, err := user.Current()
+	if err != nil {
+		return err
+	}
+	f, err := os.OpenFile(
+		path.Join(u.HomeDir, "TEMP", "temp"+time.Now().String()+".txt"),
+		os.O_RDWR|os.O_CREATE|os.O_APPEND,
+		0666,
+	)
+	if err != nil {
+		return err
+	}
+	defer f.Close()
+	log.SetOutput(f)
+	log.Println(inErr)
+	return nil
 }
