@@ -73,10 +73,11 @@ func GetUserTempFolders() ([]string, error) {
 	return []string{REGULAR_TEMP_PATH, percentTempPath}, nil
 }
 
-func WriteLogFile(inErr error) error {
+func WriteLogFile(inErr error) {
+	var errors []error
 	u, err := user.Current()
 	if err != nil {
-		return err
+		errors = append(errors, err)
 	}
 	f, err := os.OpenFile(
 		path.Join(u.HomeDir, "TEMP", "temp"+time.Now().String()+".txt"),
@@ -84,10 +85,12 @@ func WriteLogFile(inErr error) error {
 		0666,
 	)
 	if err != nil {
-		return err
+		errors = append(errors, err)
 	}
 	defer f.Close()
 	log.SetOutput(f)
 	log.Println(inErr)
-	return nil
+	for _, err := range errors {
+		log.Println(err)
+	}
 }
