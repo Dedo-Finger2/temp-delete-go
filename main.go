@@ -16,39 +16,48 @@ func main() {
 	}
 
 	fmt.Printf("Listing items inside '%s' folder...\n", ut[0])
-
 	rtEntries, err := os.ReadDir(ut[0])
 	if err != nil {
 		WriteLogFile(err)
 	}
-	fmt.Printf(
-		"Found %d items inside '%s' folder. Starting to clean up...\n",
-		len(rtEntries),
-		ut[0],
-	)
 
-	if err := DeleteFolderEntries(ut[0], rtEntries); err != nil {
-		WriteLogFile(err)
+	if len(rtEntries) == 0 {
+		fmt.Printf("Found no item inside '%s'. Next...\n", ut[0])
+	} else {
+		fmt.Printf(
+			"Found %d items inside '%s' folder. Starting to clean up...\n",
+			len(rtEntries),
+			ut[0],
+		)
+
+		if err := DeleteFolderEntries(ut[0], rtEntries); err != nil {
+			WriteLogFile(err)
+		}
+
+		fmt.Printf("'%s' was cleaned! Next is '%s'\n", ut[0], ut[1])
 	}
-
-	fmt.Printf("'%s' was cleaned! Next is '%s'", ut[0], ut[1])
 
 	fmt.Printf("Listing items inside '%s' folder...\n", ut[1])
 	ptEntries, err := os.ReadDir(ut[1])
 	if err != nil {
 		WriteLogFile(err)
 	}
-	fmt.Printf(
-		"Found %d items inside '%s' folder. Starting to clean up...\n",
-		len(ptEntries),
-		ut[1],
-	)
 
-	if err := DeleteFolderEntries(ut[1], ptEntries); err != nil {
-		WriteLogFile(err)
+	if len(ptEntries) == 0 {
+		fmt.Printf("Found no item inside '%s'. Next...\n", ut[1])
+	} else {
+		fmt.Printf(
+			"Found %d items inside '%s' folder. Starting to clean up...\n",
+			len(ptEntries),
+			ut[1],
+		)
+
+		if err := DeleteFolderEntries(ut[1], ptEntries); err != nil {
+			WriteLogFile(err)
+		}
+
+		fmt.Printf("'%s' was cleaned!\n", ut[1])
 	}
-
-	fmt.Printf("'%s' was cleaned!", ut[1])
 
 	fmt.Println("You can close this terminal, or press any key to finish it.")
 	fmt.Scanln()
