@@ -21,9 +21,8 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	for _, e := range rtEntries {
-		os.RemoveAll(REGULAR_TEMP_PATH + "\\" + e.Name())
+	if err := DeleteFolderEntries(REGULAR_TEMP_PATH, rtEntries); err != nil {
+		log.Fatal(err)
 	}
 
 	fmt.Println("Regular temp cleaned!")
@@ -32,12 +31,20 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	for _, e := range ptEntries {
-		os.RemoveAll(percentTempPath + "\\" + e.Name())
+	if err := DeleteFolderEntries(percentTempPath, ptEntries); err != nil {
+		log.Fatal(err)
 	}
 
 	fmt.Println("Percent temp cleaned!")
 
 	fmt.Scanln()
+}
+
+func DeleteFolderEntries(basePath string, entries []os.DirEntry) error {
+	for _, e := range entries {
+		if err := os.RemoveAll(basePath + "\\" + e.Name()); err != nil {
+			return err
+		}
+	}
+	return nil
 }
